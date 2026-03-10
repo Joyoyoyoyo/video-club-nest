@@ -1,0 +1,39 @@
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  loans     Loan[]   // Relation : Un utilisateur a plusieurs emprunts
+}
+
+model Video {
+  id        Int      @id @default(autoincrement())
+  title     String
+  year      Int
+  loans     Loan[]   // Relation : Une vidéo a plusieurs emprunts
+  stock     Int      @default(0) // On ajoute cette ligne avec 0 par défaut
+}
+
+model Loan {
+  id          Int       @id @default(autoincrement())
+  loan_date   DateTime  @default(now())
+  return_date DateTime? // Le "?" signifie que c'est nullable (pas encore rendue)
+  
+  // Relations
+  user        User      @relation(fields: [userId], references: [id])
+  userId      Int
+  
+  video       Video     @relation(fields: [videoId], references: [id])
+  videoId     Int
+}
