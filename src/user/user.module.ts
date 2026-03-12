@@ -7,6 +7,6 @@ import { PassportModule } from '@nestjs/passport';
   imports: [PassportModule],
   controllers: [UserController],
   providers: [UserService],
-  exports: [UserService], // Utile si LoanModule a besoin de vérifier un User
+  exports: [UserService],
 })
 export class UserModule {}

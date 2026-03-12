@@ -8,14 +8,12 @@ export class UserService {
   constructor(private prisma: PrismaService) {}
 
   async create(createUserDto: CreateUserDto) {
-    // 1. On sépare le password du reste des données
+
     const { password, ...userData } = createUserDto;
 
-    // 2. On génère le hash (10 est le coût de calcul, c'est le standard)
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    // 3. On enregistre l'utilisateur avec le mot de passe masqué
     return this.prisma.user.create({
       data: {
         ...userData,

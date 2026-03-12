@@ -5,6 +5,9 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class LoanService {
+
+  private readonly MAX_LOANS = 3
+
   constructor(private prisma: PrismaService, private eventEmitter: EventEmitter2) {}
 
   async create(createLoanDto: CreateLoanDto) {
@@ -17,7 +20,7 @@ export class LoanService {
     });
 
     // 2. La règle du Video Club : 3 max !
-    if (activeLoansCount >= 3) {
+    if (activeLoansCount >= this.MAX_LOANS) {
       throw new BadRequestException("Limite de 3 vidéos atteinte. Rendez vos anciens films !");
     }
 
